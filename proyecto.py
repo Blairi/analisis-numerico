@@ -63,48 +63,58 @@ def descomposicionLU( A:list[list[float]], b:list[float] ) -> list[float]:
     for i in range(1, n):
         # redonde de 3 cifras
         L[i][0] = round(A[i][0]/U[0][0], DECIMALES)
-        pass
     
     """
-    Renglon 2 <= i <= n -1 de U
+    Renglon 2 <= i <= n - 2 de U
         i{i}{j} = a{i}{j} - suma( desde k = 1 hasta i - 1){
-            l{i}{j}*u{k}{j}
+            l{i}{k}*u{k}{j}
         }
     """
-    for i in range(1, n-1):
+    for i in range(1, n-2):
         for j in range(i, n):
             suma = 0
             for k in range(0, i):
                 suma += L[i][k] * U[k][j]
 
             U[i][j] = A[i][j] - suma
-    
+
     """
-    Columna 2 <= j <= n - 1 de L
-        l{i}{j} = a{i}{j} - suma( desde k = 1 hasta j - 1){
-            l{i}{k}*u{k}{j}
-        } / u{j}{j}
+    Columna 2 de L:
     """
-    for j in range(1, n-1):
-        for i in range(j, n):
+    for i in range(2, 4):
+        # redonde de 3 cifras
+        L[i][1] = round( (A[i][1]-(L[i][0]*U[0][1])) / U[1][1], DECIMALES)
+
+    """
+    Renglon 3 de U
+    """
+    for i in range(2, n-1):
+        for j in range(i, n):
             suma = 0
-            for k in range(0, j):
+            for k in range(0, i):
                 suma += L[i][k] * U[k][j]
-            
-            L[i][j] = round( (A[i][j] - suma)/U[j][j], DECIMALES )
+
+            U[i][j] = A[i][j] - suma
+
+    """
+    Columna 3 de L
+    """
+    suma = 0.0
+    for k in range(2):
+        suma += L[3][k] * U[k][2]
+
+    L[3][2] = round( (A[3][2] - suma)/U[2][2], DECIMALES )
+
     """
     Ultimo renglon de U
-    u{n}{n} = a{n}{n} - suma( desde k = 1 hasta n - 1 ){
-        l{n}{k} * u{k}{n}
-    }
     """
-    for i in range(n):
+    for i in range(3,n):
         suma = 0
         for k in range(n-1):
             suma += L[n-1][k] * U[k][n-1]
 
         U[n-1][n-1] = round( A[n-1][n-1] - suma, DECIMALES )
-    
+
     """
     Calculo de d con sustitucion hacia delante
     i = 1,2,3,...,n
@@ -133,39 +143,24 @@ def descomposicionLU( A:list[list[float]], b:list[float] ) -> list[float]:
             suma += U[i][k] * x[k]
 
         x[i] = round( (d[i] - suma)/U[i][i], DECIMALES )
-        
-    print("L:")
-    imprimirMatriz(L)
-    print("U:")
-    imprimirMatriz(U)
+
     return x
 
 
 # ejecutar programa
 if __name__ == "__main__":
     A = [
-        [3.0, 2.0, -1.0],
-        [2.0, -3.0, 4.0],
-        [1.0, 1.0, 1.0]
+        [1.0, 3.0, 4.0, 0.0],
+        [-3.0, -6.0, -7.0, 2.0],
+        [3.0, 3.0, 0.0, -4.0],
+        [-5.0, -3.0, 2.0, 9.0]
     ]
     b = [
-        4.0,
-        8.0,
-        6.0
+        1,
+        -2,
+        -1,
+        2
     ]
-    
-    # A = [
-    #     [3.0, -4.0, 5.0, -7.0],
-    #     [1.0, 2.0, -4.0, 5.0],
-    #     [2.0, -4.0, 5.0, -1.0],
-    #     [3.0, -1.0, 7.0, 5.0]
-    # ]
-    # b = [
-    #     19,
-    #     31,
-    #     21,
-    #     10
-    # ]
 
     sol = descomposicionLU(A, b)
-    print(f"\nSolucion {sol}")
+    print(f"Solucion {sol}")
