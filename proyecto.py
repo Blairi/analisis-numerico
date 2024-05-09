@@ -146,21 +146,36 @@ def descomposicionLU( A:list[list[float]], b:list[float] ) -> list[float]:
 
     return x
 
+            
+print("== Mejora ergonómica en Área de urgencias del hospital gea gonzalez ==")
 
-# ejecutar programa
-if __name__ == "__main__":
-    A = [
-        [1.0, 3.0, 4.0, 0.0],
-        [-3.0, -6.0, -7.0, 2.0],
-        [3.0, 3.0, 0.0, -4.0],
-        [-5.0, -3.0, 2.0, 9.0]
-    ]
-    b = [
-        1,
-        -2,
-        -1,
-        2
-    ]
+print("\nPara un día se realizaran 4 operaciones usando este equipo:")
+print("Transfer estriado")
+print("Discos giratorios")
+print("Sillas de ducha")
+print("Cinturón para cargar paciente")
 
-    sol = descomposicionLU(A, b)
-    print(f"Solucion {sol}")
+b = [0.0 for _ in range(4)]
+print("\nIngresa el tiempo (paciente\día) para las 4 operaciones:")
+for i in range(4):
+    b[i] = float(input(f"Operación {i+1}: "))
+print("Tiempo de operaciones:")
+for i in range(4):
+    print(f"Operación {i+1}: {b[i]} (pacientes/dia)")
+
+A = [[0.0] * 4 for _ in range(4)]
+equipo = ["Transfer estriado", "Discos giratorios", "Sillas de ducha", "Cinturón para cargar paciente"]
+print("\nIngresa el tiempo de uso al día de cada equipo ergonómico para cada operación:")
+for i in range(4):
+    for j in range(4):
+        A[i][j] = float(input(f"Para la opeación {i+1} el equipo '{equipo[j]}' se ocupa: "))
+    print()
+print("Tiempo de uso de cada equipo para cada operacion:")
+for i in range(4):
+    for j in range(4):
+        print(f"Para la operacion {i+1} el equipo '{equipo[j]}' se usara: {A[i][j]}")
+    print()
+
+imprimirMatriz(A)
+print(b)
+
