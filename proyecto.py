@@ -143,6 +143,11 @@ def descomposicionLU( A:list[list[float]], b:list[float] ) -> list[float]:
             suma += U[i][k] * x[k]
 
         x[i] = round( (d[i] - suma)/U[i][i], DECIMALES )
+    print("\nMatriz L")
+    imprimirMatriz(L)
+    print("\n\nMatriz U")
+    imprimirMatriz(U)
+    print("\n")
 
     return x
 
@@ -179,3 +184,6 @@ for i in range(4):
 imprimirMatriz(A)
 print(b)
 
+sol = descomposicionLU(A, b)
+for i in range(4):
+    print(f"El equipo '{equipo[i]}' se usara {sol[i]} cantidad.")
